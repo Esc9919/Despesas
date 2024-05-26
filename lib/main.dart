@@ -2,6 +2,7 @@ import 'package:expenses/components/chart.dart';
 import 'package:expenses/components/transaction_form.dart';
 import 'package:expenses/components/transaction_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'models/transaction.dart';
 import 'dart:math';
 
@@ -90,29 +91,41 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Despesas Pessoais',
-          style: TextStyle(
-            color: Colors.white,
-          ),
+    final appBar = AppBar(
+      title: const Text(
+        'Despesas Pessoais',
+        style: TextStyle(
+          color: Colors.white,
         ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () => _openTransactionFormModal(context),
-            icon: const Icon(Icons.add),
-            color: Colors.white,
-          ),
-        ],
-        backgroundColor: Theme.of(context).primaryColor,
       ),
+      actions: <Widget>[
+        IconButton(
+          onPressed: () => _openTransactionFormModal(context),
+          icon: const Icon(Icons.add),
+          color: Colors.white,
+        ),
+      ],
+      backgroundColor: Theme.of(context).primaryColor,
+    );
+
+    final availbleHeight = MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chart(_recentTransactions),
-            TransactionList(_transactions, _removeTransaction),
+            SizedBox(
+              height: availbleHeight * 0.25,
+              child: Chart(_recentTransactions),
+            ),
+            SizedBox(
+              height: availbleHeight * 0.75,
+              child: TransactionList(_transactions, _removeTransaction),
+            ),
           ],
         ),
       ),
